@@ -12,9 +12,6 @@ container.style.display = "none";
 const intervalIdArr = [];
 // starter에 쓰일 배열
 
-const savedData = localStorage.getItem('saved-date')
-
-
 
 const dateFormMaker = function () {
   const inputYear = document.querySelector("#targetYearInput").value;
@@ -31,6 +28,14 @@ const dateFormMaker = function () {
 };
 
 const counterMaker = function (data) {
+  if (data !== savedDate) {
+    localStorage.setItem("saved-date", data);
+    // localStorage는 특정 웹페이지를 접속해둔 브라우저 및 탭을 닫더라도 데이터가 존재하도록하여 나중에 해당 웹페이지를 접속하였을 때 이전 데이터를 가져올 수 있도록 하는 storage이다.
+    // setItem(keyName, keyValue) method는 해당 객체에 key와 value를 포함하는 property를 추가한다
+    // objectName.keyName = keyValue 와 비슷하다고 생각하면 될 거 같음
+    // targetDateInput에 새로운 value가 입력되면 data로 그 값이 들어오게 되고 이전에 있던 value는 삭제되고 가장 최근 value만 남게된다
+  } 
+
   const nowDate = new Date();
   // new Date()는 현재시간을 가져와준다
   const targetDate = new Date(data).setHours(0, 0, 0, 0);
@@ -139,19 +144,17 @@ const counterMaker = function (data) {
   }
 };
 
-const starter = function () {
-  const targetDateInput = dateFormMaker();
-  // 카운트다운 시작 후 날짜를 변경시 즉시 카운트다운에 영향을 가는 부분을 수정하기 위해서 starter 함수 내로 이동함.
-  localStorage.setItem("saved-date", targetDateInput);
-  // localStorage는 특정 웹페이지를 접속해둔 브라우저 및 탭을 닫더라도 데이터가 존재하도록하여 나중에 해당 웹페이지를 접속하였을 때 이전 데이터를 가져올 수 있도록 하는 storage이다.
-  // setItem(keyName, keyValue) method는 해당 객체에 key와 value를 포함하는 property를 추가한다
-  // objectName.keyName = keyvalue 와 비슷하다고 생각하면 될 거 같음
-  // targetDateInput에 새로운 value가 입력되면 이전에 있던 value는 삭제되고 가장 최근 value만 남게된다
+const starter = function (targetDateInput) {
+  if (!targetDateInput) {
+    targetDateInput = dateFormMaker()
+  }
+  // 밑에서 savedDate라는 전달인자가 targetDateInput이라는 매개변수에 데이터를 전달해줌
+  
   container.style.display = "flex";
   msgContainer.style.display = "none";
   setClearInterval();
   counterMaker(targetDateInput);
-  // counterMaker로 targetDateInput값을 보내기 위해서 targetDateInput을 매개변수로 활용함
+  // 전달인자 tragetDateInput이 위 counterMaker 함수의 매개변수 data에 데이터를 보냄
 
   // for (let i = 0; i < 100; 1++) {
   //   setTimeout(() => {
@@ -169,6 +172,7 @@ const starter = function () {
 };
 
 const setClearInterval = function () {
+  localStorage.removeItem('saved-date')
   for (let i = 0; i < intervalIdArr.length; i++) {
     clearInterval(intervalIdArr[i]);
   }
@@ -180,3 +184,12 @@ const resetTimer = function () {
   msgContainer.innerHTML = "<h3>D-Day를 입력해주세요.</h3>";
   setClearInterval();
 };
+
+const savedDate = localStorage.getItem('saved-date')
+if (savedDate) {
+  starter(savedDate)
+  // savedDate라는 전달인자를 위 starter함수의 targetDateInptut이라는 매개변수에게 전달해준다.
+} else {
+  msgContainer.innerHTML = "<h3>D-Day를 입력해주세요.</h3>";
+  container.style.display = "none";
+}
