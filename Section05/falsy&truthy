@@ -1,0 +1,31 @@
+# falsy
+- false인 거 같은 느낌
+- undefined
+- null
+- 0
+- ""
+- NaN
+
+# truthy
+- true인 거 같은 느낌
+- 위 falsy한 데이터를 제외한 모든 데이터
+
+# 조건문과 결합한 예제
+if (Data) {
+<!-- 위 내용은 Data = truthy 를 가정하는 것 -->
+    console.log(Data)
+} else {
+<!-- Data != truthy  or  Data = falsy -->
+    console.log('Data is falsy')
+}
+<!-- 하지만 모든 경우에서 if()안에 truthy한 데이터가 들어가는 것은 아니기에 not 연산자를 활용하는 예제도 밑에 넣어보겠다. -->
+
+# 조건문, NOT 연산자와 결합한 예제
+<!-- Data가 falsy한 데이터라고 가정했을 때 -->
+if (!Data) {
+<!-- 위 내용은 !Data = truthy 를 가정하는 것 -->
+    console.log(Data)
+} else {
+<!-- !Data != truthy  or  !Data = falsy -->
+    console.log('Data is falsy')
+}
