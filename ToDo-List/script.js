@@ -1,0 +1,63 @@
+const toDoInput = document.querySelector("#toDo-input");
+const toDoList = document.querySelector("#toDo-list");
+
+const createToDo = function () {
+  const newLi = document.createElement("li");
+  // createElement는 HTML 내부에 원하는 태그를 생성해주는 속성
+  const newSpan = document.createElement("span");
+  const newBtn = document.createElement('button')
+
+  newBtn.addEventListener('click', () => {
+    // addEentLister method를 이용하여 click되었을 때 뒤의 함수가 newBtn에게 적용되도록 해줌
+    newLi.classList.toggle('completeLi')
+    // classList.toggle('complete')를 이용하여 newBtn이 클릭(체크)되었을 때 newLi에게 없던 class명을 complete로 지정해주고 다시 클릭(체크해제)되었을 때 newLi의 class명인 complete를 삭제해준다.
+    newBtn.classList.toggle('completeBtn')
+  })
+
+  newLi.addEventListener('dblclick', () => {
+    newLi.remove()
+    // 더블클릭되었을 때 해당 newLi 삭제
+    // 모든 각각의 newLi에게 eventListner가 추가되었고 그렇기 때문에 특정 newLi에게 더블클릭해주었을 때 해당 newLi만 삭제되는 것이다
+  })
+
+  newSpan.textContent = toDoInput.value;
+  // 밑에서 toDoInput.value = ''를 사용하여 빈 값을 재할당해줘야하니 value 값을 const toDoInput의 위치가 아닌 현 위치에서 가져왔다.
+  newLi.appendChild(newBtn)
+  newLi.appendChild(newSpan);
+  // appendChild method는 내부에 하위 속성으로 하나의 태그를 추가하는 경우에 사용한다
+  // newSpan에는 textContent를 사용하여 toDoInput에 담겨있는 input 값(String)을 담아주는 것이라 textContent를 사용하는 것이 가능했지만 newLi의 경우에는 newSpan에 담겨있는 span태그를 담아야하기 때문에 textContent가 아닌 appendChild를 사용하게 되었다.
+  toDoList.appendChild(newLi);
+  toDoInput.value = ''
+  // 위에서 const를 활용하여 toDoInput을 선언해주었으므로 toDoInput.value 값 자체를 빈 값으로 바꾸면 된다. 하지만 let을 사용하여 선언했다 하더라도 toDoInput = ''는 작동하지 않으니 빈 값으로 만들어야할때는 변수명.value = ''을 사용하자
+
+  saveItemsFn()
+}
+
+const keyCodeCheck = function () {
+  if (window.event.keyCode === 13 && toDoInput.value !== '') {
+    // window는 전역설정으로 사실 생략해도 된다
+    // event는 키보드가 눌리거나 마우스가 눌리거나 등의 여러 이벤트에 대한 것을 나타내준다
+    // keyCode는 위의 event로 인해 발생한 것들 중 키보드의 어떤 키가 눌렸을 때 그 키의 값을 나타내주는 것으로 keyCode 13은 Enter키이다.
+    createToDo()
+  }
+};
+
+const delAll = function () {
+  const liList = document.querySelectorAll('li')
+  // querySelectorAll은 모든 li태그들을 NodeList에 담겨있는 array의 형태로 반환해준다. index값을 각각 가지고 있다는 뜻
+  for (let i = 0; i < liList.length; i++) {
+    liList[i].remove()
+  }
+}
+
+const saveItemsFn = function () {
+  const saveItems = []
+  for (let i = 0; i < toDoInput.children.length; i++) {
+    const toDoObj = {
+      contentsData: toDoList.children[i].querySelector('span').textContent,
+      completeLiData: toDoList.children[i].classList.contain('completeLi'),
+      completeBtnData: toDoList.children[i].classList.contains('completeBtn')
+    }
+    saveItems.push(toDoObj)
+  }
+}
