@@ -38,7 +38,7 @@ body {
     user-select: none;
 }
 
-.complete {
+.completeLi {
     color: rgb(155, 155, 155);
     text-decoration: line-through;
 }
