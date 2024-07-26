@@ -26,15 +26,20 @@ const createToDo = function (storageData) {
     newLi.remove();
     // 더블클릭되었을 때 해당 newLi 삭제
     // 모든 각각의 newLi에게 eventListner가 추가되었고 그렇기 때문에 특정 newLi에게 더블클릭해주었을 때 해당 newLi만 삭제되는 것이다
-
-    if (storageData.completeLi) {
-      newLi.classList.add("completeLi")
-    }
-
-    if (storageData.completeBtn) {
-      newBtn.classList.add("completeBtn")
-    }
+    saveItemsFn()
   });
+
+  if (storageData?.completeLiData) {
+    // 옵셔널 체이닝 = storageData라는 객체의 값이 nullish한 값(null, undefined)인 경우 completeLiData라는 키의 value를 찾지 않고 해당 조건을 무시한다.
+    // storageData에 아무런 값도 없을 때 toDoInput에 새로운 값을 입력해주었을 때 에러가 발생하는 것을 방지한다
+  // if (storageData && storageData.completeLiData)
+    // 옵셔널 체이닝을 사용하지 않았을 때 storageData가 존재하고 storageData.completeLiData가 존재할 때 true를 반환해주게 하는 방법도 있다.
+    newLi.classList.add('completeLi')
+  }
+
+  if (storageData?.completeBtnData) {
+    newBtn.classList.add("completeBtn")
+  }
 
   
 
@@ -66,6 +71,7 @@ const delAll = function () {
   for (let i = 0; i < liList.length; i++) {
     liList[i].remove();
   }
+  saveItemsFn()
 };
 
 const saveItemsFn = function () {
@@ -79,8 +85,16 @@ const saveItemsFn = function () {
     };
     saveItems.push(toDoObj);
   }
-  localStorage.setItem("saved-items", JSON.stringify(saveItems));
-  // JSON.stringify는 JSON 문자열 형태로 변환하는 것
+
+  saveItems.length === 0 ? localStorage.removeItem('saved-items') : localStorage.setItem("saved-items", JSON.stringify(saveItems))
+  // 삼항 연산자를 활용한 조건문으로 아래의 if ... else문과 같다.
+
+  // if (saveItems.length === 0) {
+  //   localStorage.removeItem('saved-items')
+  // } else {
+  //   localStorage.setItem("saved-items", JSON.stringify(saveItems));
+  //   // JSON.stringify는 JSON 문자열 형태로 변환하는 것  
+  // }
 };
 
 if (savedToDoList) {
