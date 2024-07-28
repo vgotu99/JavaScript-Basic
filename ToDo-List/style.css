@@ -3,6 +3,8 @@
 }
 
 body {
+    background-size: corver;
+    background-image: url('./images/Clear.jpg');
     background-color: azure;
     display: flex;
     flex-direction: column;
@@ -11,9 +13,18 @@ body {
     min-height: 100vh;
 }
 
+#location-name-tag {
+    color: white;
+    text-shadow: 2px 2px black;
+    opacity: 80%;
+}
+
+
+
 .toDo-container {
     max-width: 100%;
     width: 400px;
+    opacity: 80%;
 }
 
 #toDo-input {
@@ -67,4 +78,13 @@ li button:active, .completeBtn {
     background-color: antiquewhite;
     padding: 0.2rem 1rem;
     cursor: pointer; 
+    border: none;
+    border-radius: 5px;
+    box-shadow: 3px 3px black;
 }
+
+.delBtn-wrapper button:active {
+    box-shadow: none;
+    margin: 3px 0px 0px 3px
+}
+
